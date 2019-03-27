@@ -22,6 +22,9 @@
 </h:head>
 <h:body>
 
+
+
+
 	<center>
 		<h1>Cadastro de Usuário</h1>
 
@@ -38,19 +41,13 @@
 				<h:inputText type="text" class="form-control"
 					value="#{usuarioController.usuario.nome}" />
 
-				<h:outputLabel value="DDD: " />
-				<h:inputText type="text" class="form-control"
-					value="#{usuarioController.telefone.ddd}"
-					disabled="#{usuarioController.telefone.ddd != null}"/>
-
-				<h:outputLabel value="Telefone: " />
-				<h:inputText type="text" class="form-control"
-					value="#{usuarioController.telefone.telefone}" 
-					disabled="#{usuarioController.telefone.telefone != null}"/>
-
-				<h:commandButton class="btn btn-light" value="Incluir Telefone"
-					actionListener="#{usuarioController.incluirTelefone}" />
-
+				<h:outputLabel value="Perfil de Usuário: " />
+				<h:selectOneMenu class="form-control"
+					value="#{usuarioController.usuario.perfil}">
+					<f:selectItem itemLabel="Selecione ..." />
+					<f:selectItems value="#{usuarioController.listaPerfil}"
+						var="perfil" itemLabel="#{perfil.label}" itemValue="#{perfil}" />
+				</h:selectOneMenu>
 				<h:outputLabel value="Login: " />
 				<h:inputText type="text" class="form-control"
 					value="#{usuarioController.usuario.login}" />
@@ -59,22 +56,15 @@
 				<h:inputSecret type="text" class="form-control"
 					value="#{usuarioController.usuario.senha}" />
 
-
-				<h:outputLabel value="Perfil de Usuário: " />
-				<h:selectOneMenu class="form-control"
-					value="#{usuarioController.usuario.perfil}">
-					<f:selectItem itemLabel="Selecione ..." />
-					<f:selectItems value="#{usuarioController.listaPerfil}"
-						var="perfil" itemLabel="#{perfil.label}" itemValue="#{perfil}" />
-				</h:selectOneMenu>
-
 			</h:panelGrid>
 
-			<h:panelGrid columns="4">
+
+
+			<h:panelGrid columns="6">
+
 				<h:commandButton class="btn btn-outline-success" value="Incluir"
 					disabled="#{usuarioController.usuario.id != null}"
 					actionListener="#{usuarioController.incluir}" />
-
 				<h:commandButton class="btn btn-light" value="Alterar"
 					disabled="#{usuarioController.usuario.id == null}"
 					action="#{usuarioController.alterar}" />
@@ -86,22 +76,36 @@
 				<h:commandButton class="btn btn-light" value="Limpar"
 					actionListener="#{usuarioController.limpar}" />
 
+			</h:panelGrid>
+				<h:panelGrid columns="5">
 
+				<h:outputLabel value="DDD: " />
+				<h:inputText type="text" class="form-control"
+					value="#{usuarioController.telefone.ddd}"
+					disabled="#{usuarioController.telefone.ddd != null}" />
+
+				<h:outputLabel value="Telefone: " />
+				<h:inputText type="text" class="form-control"
+					value="#{usuarioController.telefone.telefone}"
+					disabled="#{usuarioController.telefone.telefone != null}" />
+
+				<h:commandButton class="btn btn-outline-success"
+					value="Incluir Telefone"
+					actionListener="#{usuarioController.incluirTelefone}" />
 
 			</h:panelGrid>
 		</h:form>
 		<h:form>
 
 			<h:dataTable value="#{usuarioController.usuario.listaTelefone}"
-				var="obj">
-				<h:column>
-					<f:facet name="header">DDD:</f:facet>
-					<h:outputLabel value="#{obj.}" />
+				var="tel">
+				<h:column >
+					<f:facet name="header">DDD</f:facet>
+					<h:outputLabel value="#{tel.ddd}" />
 				</h:column>
-
 				<h:column>
-					<f:facet name="header">Telefone:</f:facet>
-					<h:commandLink value="#{obj.}" />
+					<f:facet name="header">Telefone</f:facet>
+					<h:outputLabel value="#{tel.telefone}" />
 				</h:column>
 
 			</h:dataTable>
@@ -137,6 +141,8 @@
 				</h:column>
 			</h:dataTable>
 		</h:form>
+
 	</center>
+
 </h:body>
 </html>

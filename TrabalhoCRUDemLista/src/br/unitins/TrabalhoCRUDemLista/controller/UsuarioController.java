@@ -20,23 +20,35 @@ public class UsuarioController implements Serializable {
 
 	private Usuario usuario;
 	private Telefone telefone;
-	private List<Telefone> listaTelefone;
+
 	private List<Usuario> listaUsuario;
+	private List<Telefone> listaTelefone;
+
+	public List<Telefone> getListaTelefone() {
+		return listaTelefone;
+	}
+
+	public void setListaTelefone(List<Telefone> listaTelefone) {
+		this.listaTelefone = listaTelefone;
+	}
+
+	public Telefone getTelefone() {
+		if (telefone == null)
+			telefone = new Telefone();
+		return telefone;
+	}
+
+	public void setTelefone(Telefone telefone) {
+		this.telefone = telefone;
+	}
 
 	public List<Usuario> getListaUsuario() {
 		if (listaUsuario == null) {
 			listaUsuario = new ArrayList<Usuario>();
 			listaTelefone = new ArrayList<Telefone>();
-
-			listaTelefone.add(new Telefone("63", "984543996"));
-
+			listaTelefone.add(new Telefone("63", "90239432"));
 			listaUsuario.add(new Usuario(1, "Joao", "joao", "123", Perfil.FUNCIONARIO, listaTelefone));
-
-			// listaUsuario.add(new Usuario(1, "Joao", "joao", "123",
-			// Perfil.FUNCIONARIO,listaTelefone.add(new Telefone("63","98765432"));
-
-			// listaUsuario.add(new Usuario(2, "Maria", "maria", "321",
-			// Perfil.ADMINISTRADOR));
+			listaTelefone = null;
 		}
 		return listaUsuario;
 	}
@@ -65,9 +77,15 @@ public class UsuarioController implements Serializable {
 			Util.addMessageError("A senha deve ser informada.");
 			return;
 		}
-
+		if ((getTelefone().getDdd() == null || getTelefone().getDdd().trim().equals(""))
+				|| (getTelefone().getTelefone() == null || getTelefone().getTelefone().trim().equals(""))) {
+			getUsuario().getListaTelefone().add(new Telefone(telefone.getDdd(), telefone.getTelefone()));
+		}
 		getListaUsuario().add(getUsuario());
 		limpar();
+		listaTelefone = null;
+		telefone = null;
+
 	}
 
 	public void alterar() {
@@ -101,20 +119,20 @@ public class UsuarioController implements Serializable {
 	}
 
 	public void incluirTelefone() {
-
-		listaTelefone.add(new Telefone(telefone.getDdd(), telefone.getTelefone()));
-
-	}
-
-	public Telefone getTelefone() {
-		if (telefone == null) {
-			telefone = new Telefone();
+		if ((getTelefone().getDdd() == null)
+				|| (getTelefone().getTelefone() == null)) {
+			return;
 		}
-		return telefone;
-	}
+		int index = getListaUsuario().indexOf(getUsuario());
+		getListaUsuario().set(index, getUsuario());
 
-	public void setTelefone(Telefone telefone) {
-		this.telefone = telefone;
+		getUsuario().getListaTelefone().add(new Telefone(telefone.getDdd(), telefone.getTelefone()));
+		if (index != -1) {
+			// alterando a posicao da lista com um novo usuario
+			getListaUsuario().set(index, getUsuario());
+			limpar();
+		}
+		listaTelefone = null;
+		telefone = null;
 	}
-
 }
